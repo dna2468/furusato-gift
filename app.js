@@ -2,7 +2,11 @@
 const $  = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const yen = n => n.toLocaleString("ja-JP") + "円";
-const catName = id => (CATEGORIES.find(c => c.id === id) || {}).name || "";
+const cat = id => CATEGORIES.find(c => c.id === id) || {};
+const catName = id => cat(id).name || "";
+const catMono = id => cat(id).mono || "";
+// 産地表記から都道府県名を取り出す（例: 北海道紋別市 → 北海道、宮崎県都城市 → 宮崎県）
+const prefOf = region => (region.match(/^(.+?[都道府県])/) || [, region])[1];
 
 /* ===== 状態 ===== */
 let cart = {};               // { productId: qty }
@@ -23,7 +27,7 @@ function init() {
 function renderCategories() {
   $("#categoryGrid").innerHTML = CATEGORIES.map(c => `
     <div class="category-card" data-cat="${c.id}">
-      <span class="ico">${c.icon}</span>
+      <span class="category-card__mono" style="background:${c.grad}">${c.mono}</span>
       <span class="name">${c.name}</span>
     </div>`).join("");
 }
@@ -43,7 +47,10 @@ function renderRanking() {
   $("#rankingList").innerHTML = top.map((p, i) => `
     <div class="rank-card" data-id="${p.id}">
       <span class="rank-card__badge">${i + 1}</span>
-      <div class="rank-card__img" style="background:${p.grad}">${p.emoji}</div>
+      <div class="rank-card__img" style="background:${p.grad}">
+        <span class="media-pref">${prefOf(p.region)}</span>
+        <span class="media-cat">${catName(p.category)}</span>
+      </div>
       <div class="rank-card__body">
         <p class="rank-card__name">${p.name}</p>
         <p class="rank-card__price">${yen(p.price)}</p>
@@ -80,10 +87,10 @@ function renderProducts() {
     <article class="product-card">
       <div class="product-card__img" style="background:${p.grad}">
         <span class="product-card__cat">${catName(p.category)}</span>
-        ${p.emoji}
+        <span class="media-pref">${prefOf(p.region)}</span>
       </div>
       <div class="product-card__body">
-        <p class="product-card__region">📍 ${p.region}</p>
+        <p class="product-card__region">${p.region}</p>
         <h3 class="product-card__name">${p.name}</h3>
         <p class="product-card__desc">${p.desc}</p>
         <div class="product-card__foot">
@@ -136,7 +143,7 @@ function renderCartItems() {
     const q = cart[id];
     return `
       <div class="cart-item">
-        <div class="cart-item__img" style="background:${p.grad}">${p.emoji}</div>
+        <div class="cart-item__img" style="background:${p.grad}">${catMono(p.category)}</div>
         <div class="cart-item__info">
           <p class="cart-item__name">${p.name}</p>
           <p class="cart-item__price">${yen(p.price)} × ${q} = ${yen(p.price * q)}</p>
