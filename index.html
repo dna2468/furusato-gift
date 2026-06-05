@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ふるさとギフト | ふるさと納税で地域を応援</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="header">
+  <div class="header__inner">
+    <a href="#" class="logo" id="homeLink">
+      <span class="logo__mark">ふ</span>
+      <span class="logo__text">ふるさと<strong>ギフト</strong></span>
+    </a>
+    <nav class="nav">
+      <a href="#ranking">ランキング</a>
+      <a href="#products">返礼品をさがす</a>
+      <a href="#simulator">控除額シミュレーター</a>
+      <a href="#flow">はじめての方へ</a>
+    </nav>
+    <button class="cart-btn" id="cartBtn" aria-label="カートを開く">
+      🛒<span class="cart-btn__count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">ふるさと納税で、地域の魅力を食卓に。</p>
+      <h1 class="hero__title">応援したい街へ。<br>感謝が届く、返礼品さがし。</h1>
+      <p class="hero__lead">実質負担2,000円で、全国の特産品やお礼の品を。<br>あなたの寄付が、地域の未来を支えます。</p>
+      <div class="hero__actions">
+        <a href="#products" class="btn btn--primary">返礼品をさがす</a>
+        <a href="#simulator" class="btn btn--ghost">控除額をシミュレーション</a>
+      </div>
+      <div class="hero__stats">
+        <div><strong id="statCount">0</strong><span>掲載返礼品</span></div>
+        <div><strong>1,788</strong><span>参加自治体</span></div>
+        <div><strong>2,000円</strong><span>実質自己負担</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- カテゴリ -->
+  <section class="categories">
+    <div class="container">
+      <div class="category-grid" id="categoryGrid"></div>
+    </div>
+  </section>
+
+  <!-- ランキング -->
+  <section id="ranking" class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">人気返礼品ランキング</h2>
+        <p class="section__sub">いま選ばれているお礼の品 TOP5</p>
+      </div>
+      <div class="ranking" id="rankingList"></div>
+    </div>
+  </section>
+
+  <!-- 返礼品一覧 -->
+  <section id="products" class="section section--gray">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">返礼品をさがす</h2>
+        <p class="section__sub">カテゴリ・キーワード・寄付金額でしぼり込み</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search">
+          <input type="search" id="searchInput" placeholder="例: いくら、シャインマスカット、米…">
+        </div>
+        <div class="toolbar__filters">
+          <select id="categoryFilter">
+            <option value="">すべてのカテゴリ</option>
+          </select>
+          <select id="priceFilter">
+            <option value="">寄付金額：指定なし</option>
+            <option value="0-10000">〜10,000円</option>
+            <option value="10000-20000">10,000〜20,000円</option>
+            <option value="20000-50000">20,000〜50,000円</option>
+            <option value="50000-">50,000円〜</option>
+          </select>
+          <select id="sortSelect">
+            <option value="popular">人気順</option>
+            <option value="price-asc">寄付額が安い順</option>
+            <option value="price-desc">寄付額が高い順</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="result-count" id="resultCount"></p>
+      <div class="product-grid" id="productGrid"></div>
+      <p class="empty" id="emptyState" hidden>条件に一致する返礼品が見つかりませんでした。</p>
+    </div>
+  </section>
+
+  <!-- シミュレーター -->
+  <section id="simulator" class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">控除額シミュレーター</h2>
+        <p class="section__sub">年収と家族構成から、寄付上限額の目安を計算します</p>
+      </div>
+      <div class="simulator">
+        <div class="simulator__form">
+          <label>
+            <span>年間給与収入（年収）</span>
+            <div class="input-suffix">
+              <input type="number" id="income" min="0" step="100000" placeholder="例: 5000000" value="5000000">
+              <em>円</em>
+            </div>
+          </label>
+          <label>
+            <span>家族構成</span>
+            <select id="family">
+              <option value="single">独身・共働き</option>
+              <option value="spouse">配偶者を扶養（専業主婦/夫）</option>
+              <option value="spouse_child_hs">夫婦＋子1人（高校生）</option>
+              <option value="spouse_child2">夫婦＋子2人（大学生＋高校生）</option>
+            </select>
+          </label>
+          <button class="btn btn--primary btn--block" id="simulateBtn">上限額を計算する</button>
+          <p class="simulator__note">※ 社会保険料控除等を年収の約15%と仮定した簡易計算です。実際の控除上限額は各種控除・お住まいの自治体により異なります。正確な金額は税理士・お住まいの市区町村にご確認ください。</p>
+        </div>
+        <div class="simulator__result" id="simResult">
+          <p class="simulator__result-label">寄付上限額の目安</p>
+          <p class="simulator__result-amount"><span id="limitAmount">—</span></p>
+          <p class="simulator__result-desc" id="limitDesc">年収と家族構成を入力して計算してください。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 寄付の流れ -->
+  <section id="flow" class="section section--gray">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">寄付の流れ</h2>
+        <p class="section__sub">はじめての方でもかんたん4ステップ</p>
+      </div>
+      <ol class="flow">
+        <li><span class="flow__num">1</span><h3>返礼品をえらぶ</h3><p>応援したい自治体や欲しいお礼の品を選びます。</p></li>
+        <li><span class="flow__num">2</span><h3>寄付を申し込む</h3><p>カートから申込み・お支払い手続きをします。</p></li>
+        <li><span class="flow__num">3</span><h3>返礼品が届く</h3><p>自治体から特産品とお礼状・書類が届きます。</p></li>
+        <li><span class="flow__num">4</span><h3>控除を受ける</h3><p>ワンストップ特例または確定申告で税控除を受けます。</p></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="logo__mark">ふ</span>
+      <p>ふるさとギフト</p>
+    </div>
+    <nav class="footer__nav">
+      <a href="#ranking">ランキング</a>
+      <a href="#products">返礼品をさがす</a>
+      <a href="#simulator">シミュレーター</a>
+      <a href="#flow">はじめての方へ</a>
+    </nav>
+    <p class="footer__copy">© 2026 ふるさとギフト（デモサイト）. このサイトは学習・デモ用のサンプルです。</p>
+  </div>
+</footer>
+
+<!-- カートドロワー -->
+<div class="drawer" id="cartDrawer" aria-hidden="true">
+  <div class="drawer__overlay" id="drawerOverlay"></div>
+  <aside class="drawer__panel" role="dialog" aria-label="カート">
+    <div class="drawer__head">
+      <h2>カート</h2>
+      <button class="drawer__close" id="drawerClose" aria-label="閉じる">✕</button>
+    </div>
+    <div class="drawer__body" id="cartItems"></div>
+    <div class="drawer__foot">
+      <div class="drawer__total">
+        <span>寄付金額 合計</span>
+        <strong id="cartTotal">0円</strong>
+      </div>
+      <p class="drawer__hint">実質自己負担は2,000円（上限額の範囲内の場合）</p>
+      <button class="btn btn--primary btn--block" id="checkoutBtn">寄付を申し込む</button>
+    </div>
+  </aside>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
